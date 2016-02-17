@@ -1,0 +1,141 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+</head>
+<!--
+EOT;
+$title=$cs==2?"微信 > 回复设置":"微信 > 账号设置";
+$rurl="../dlapp/index.php?anyid={$anyid}&lang={$lang}";
+require_once template('../../app/weixin/top');
+require_once template('metlangs');
+echo <<<EOT
+-->
+<body>
+<style type="text/css">
+textarea.gens{width:70% !important;height:150px;}
+</style>
+<form method="POST" name="myform" action="setapp.php?anyid={$anyid}&lang={$lang}&cs={$cs}" target="_self">
+<input name="action" type="hidden" value="modify" />
+<div class="v52fmbx_tbmax">
+<div class="v52fmbx_tbbox">
+<div class="v52fmbx">
+<!--
+EOT;
+if($cs==3){
+echo <<<EOT
+-->
+	<h3 class="v52fmbx_hr metsliding" sliding="1">开发者凭据</h3>
+	<div class="metsliding_box metsliding_box_1">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>AppId{$lang_marks}</dt>
+			<dd>
+				<input name="met_weixin_AppId" type="text" class="text" value="$met_weixin_AppId" />
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>AppSecret{$lang_marks}</dt>
+			<dd>
+				<input name="met_weixin_AppSecret" type="text" class="text" value="$met_weixin_AppSecret" />
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+	if($met_weixin_ticket){
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>二维码{$lang_marks}</dt>
+			<dd>
+				<span><img src="http://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={$met_weixin_ticket}" width="150"/></span>
+<!--
+EOT;
+		if($met_agents_type<3){
+echo <<<EOT
+-->
+				<br><span>如何获取带LOGO的微信二维码：<a href="http://www.metinfo.cn/course/">点击查看</a></span>
+<!--
+EOT;
+		}
+echo <<<EOT
+-->
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+	}else{
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>二维码{$lang_marks}</dt>
+			<dd>
+				<span>成功接入微信公众号后将自动生成。</span>
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+	}
+echo <<<EOT
+-->
+	</div>
+<!--
+EOT;
+}
+if($cs==2){
+echo <<<EOT
+-->
+		<h3 class="v52fmbx_hr metsliding" sliding="1">回复消息</h3>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>关注后，发送回复信息{$lang_marks}</dt>
+			<dd>
+				<a href="./reply.php?action=attention&anyid={$anyid}&cs={$cs}&id={$attention[id]}&lang={$lang}">编辑</a>
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>发信息后，发送回复信息{$lang_marks}</dt>
+			<dd>
+				<a href="./reply.php?action=info&anyid={$anyid}&cs={$cs}&id={$reply[id]}&lang={$lang}">编辑</a>
+			</dd>
+		</dl>
+		</div>
+
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+</div>
+<!--
+EOT;
+if($cs==3){
+echo <<<EOT
+-->
+<div class="v52fmbx_submit"><input type="submit" name="Submit" value="{$lang_Submit}" class="submit" onclick="return Smit($(this),'myform')" /></div>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+</div>
+</div>
+</form>
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->

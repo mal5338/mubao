@@ -1,0 +1,176 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+<title>菜单管理</title>
+</head>
+<body>
+<!--
+EOT;
+$title="微信营销 > 公众号列表";
+$rurl="../dlapp/index.php?anyid={$anyid}&lang={$lang}";
+require_once template('metlangs');
+if($status==1){
+   $style1="style='color:#FF0000' selected='selected'";
+ }elseif($status==2){
+   $style2="style='color:#FF0000' selected='selected'";
+ }elseif($status==3){
+   $style3="style='color:#FF0000' selected='selected'";
+  }elseif($status==''){
+   $style0="style='color:#FF0000' selected='selected'";
+ }
+ $met_host='api.metinfo.cn';
+require_once template('../../app/weixin/top');
+//if($action=='attention'){
+if(0){
+echo <<<EOT
+-->
+<div class="v52fmbx_tbmax">
+<div class="v52fmbx_tbbox">
+<div class="v52fmbx">
+	<h3 class="v52fmbx_hr metsliding" sliding="3" style="font-size: 12pt ;">请扫描二维码关注MetInfo官方微信</h3>
+	<div class="metsliding_box metsliding_box_3">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt></dt>
+			<dd>
+				<div id="attention"></div>
+				<span class="tips">1.关注MetInfo官方微信后才能添加微信公众号。</span><br />
+				<span class="tips">2.已关注用户只需再次扫描二维码，即可使用。</span>
+			</dd>
+		</dl>
+		</div>
+		
+
+	</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+		$.ajax({
+			url: 'http://{$met_host}/weixin/attention.php?weixinurl={$weixinurl}',
+			type: 'GET',
+			dataType: 'jsonp',
+			jsonp: 'jsoncallback',
+			cache:false,
+			success: function(data) {
+				$('#attention').html("<img src='"+data.url+"' width='150' height='150'>");
+			}
+		});
+		setInterval("startRequest()",1000); 
+});
+function startRequest() 
+{ 
+	$.ajax({
+		url: 'accountseditorsave.php?action=attention',
+		type: 'GET',
+		cache: false,
+		success: function(data) {
+			if(data==1){
+				alert('谢谢关注MetInfo微信账号');
+				location.href="accountseditor.php?lang={$lang}&anyid={$anyid}&cs={$cs}&action=add";
+			}
+		}
+	});
+} 
+</script>
+<!--
+EOT;
+}else{
+echo <<<EOT
+-->
+<div class="v52fmbx_tbmax v52fmbx_tbmaxmt">
+<div class="v52fmbx_tbbox">
+<h3 class="v52fmbx_hr">
+	<a href="../weixin/accountseditor.php?lang=$lang&anyid={$anyid}&cs={$cs}&action=add">+添加公众号</a>
+</h3>
+<table cellpadding="2" cellspacing="1" class="table">
+              <tr>
+                <td width="30" class="list">{$lang_selected}</td>
+                <td width="80" class="list">公众号名称</td>
+                <td width="100" class="list">原始ID</td>
+				 <td width="80" class="list">微信号</td>
+				<td class="list list_left">{$lang_operate}</td>
+              </tr>
+			  <form name="del" method="post" action="accounts.php?lang=$lang&anyid=$anyid&cs=$cs">
+<!--
+EOT;
+foreach ($accounts as $key=>$val){
+echo <<<EOT
+-->          
+              <tr class="mouse click">
+              <td class="list-text"><input name='id' type='checkbox' onClick="unselectall()" id="id" value='{$val[id]}' /><input type='hidden' id="level_{$val[id]}" value='1' /></td>
+                <td class="list-text">{$val[name]}</td>
+                <td class="list-text">$val[originalid]</td>
+				<td class="list-text">$val[weixinid]</td>
+				<td class="list-text list_left" style="color:#999;"><a href="accountseditor.php?id=$val[id]&lang=$lang&anyid={$anyid}&cs={$cs}&action=editor" >帐号设置</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="index.php?id=$val[id]&lang=$lang&anyid={$anyid}">自定义菜单</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="reply.php?id=$val[id]&anyid={$anyid}&lang={$lang}&cs=5" >自动回复</a></td>
+              </tr>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+<!--
+EOT;
+if(!count($accounts)){
+echo <<<EOT
+--> 
+   	    <tr> 
+            <td width="40" class="list-text list_left" colspan="5">尚未添加公众号</td>
+        </tr>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+<input name="action" type="hidden" id="action" value="del">
+<input name="allid" type="hidden" id="allid" value=""></form>
+   	   <tr> 
+            <td width="40" class="all"><input name="chkAll" type="checkbox" id="chkAll" onclick="CheckAllx($(this),'del')" value="checkbox" /></td>
+			  <td class="all-submit" colspan="5" style="padding:5px 10px;">
+			  <input name="submit" type='submit' value='删除' class="submit li-submit" onclick="return met_modify($(this),'del','del');" /> 
+			  <span style="font-weight:normal; color:#999;"></span>
+              </td>
+          </tr>
+</table>
+</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	seachinput($('#searchtext'),'查询信息');
+<!--
+EOT;
+if($is_curl==1){
+echo <<<EOT
+--> 	
+	$.ajax({
+		url: 'http://{$met_host}/weixin/user.php?weixinurl={$weixinurl}&weixinaccounts={$weixinaccounts}',
+		type: 'GET',
+		dataType: 'jsonp',
+		jsonp: 'jsoncallback',
+		cache:false,
+		success: function(data) {
+		}
+	});
+<!--
+EOT;
+}
+echo <<<EOT
+--> 
+});
+</script>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->

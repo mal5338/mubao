@@ -1,0 +1,184 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+</head>
+<!--
+EOT;
+$title="微信营销 > 帮助";
+$rurl="../dlapp/index.php?anyid={$anyid}&lang={$lang}";
+require_once template('../../app/weixin/top');
+require_once template('metlangs');
+echo <<<EOT
+-->
+<body>
+<style type="text/css">
+textarea.gens{width:70% !important;height:150px;}
+.v52fmbx_dlbox a{ color:#333; text-decoration:none;}
+.v52fmbx_dlbox a:hover{ color:#000; text-decoration:underline;}
+</style>
+<form method="POST" name="myform" action="setapp.php?anyid={$anyid}&lang={$lang}&cs={$cs}" target="_self">
+<input name="action" type="hidden" value="modify" />
+<div class="v52fmbx_tbmax">
+<div class="v52fmbx_tbbox">
+<div class="v52fmbx">
+	<h3 class="v52fmbx_hr metsliding" sliding="1">应用简介</h3>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/156-cn.html" target="_blank">企业为什么要开通微信公众号？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/157-cn.html" target="_blank">MetInfo微信营销应用有什么优势？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/158-cn.html" target="_blank">MetInfo微信营销应用为什么能够永久免费？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox v52fmbx_mo">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/159-cn.html" target="_blank">企业如何利用MetInfo做好微信营销？</a>
+		</dd>
+	</dl>
+	</div>
+	<h3 class="v52fmbx_hr metsliding" sliding="2">使用教程</h3>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/160-cn.html" target="_blank">如何安装MetInfo并添加微信营销应用？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/146-cn.html" target="_blank">如何创建微信公众号？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/164-cn.html" target="_blank">如何添加公众号？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/165-cn.html" target="_blank">如何设置自定义菜单？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/166-cn.html" target="_blank">如何设置自动回复？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/167-cn.html" target="_blank">如何实现微官网？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/163-cn.html" target="_blank">如何给订阅用户群发消息？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/149-cn.html" target="_blank">如何生成便于用户关注的二维码图案？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox v52fmbx_mo">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/162-cn.html" target="_blank">如何将二维码贴在网站上便于访客关注？</a>
+		</dd>
+	</dl>
+	</div>
+	<h3 class="v52fmbx_hr metsliding" sliding="3">常见问题</h3>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/tutorial/161-cn.html" target="_blank">注册公众号选择服务号还是订阅号？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/faq/150-cn.html" target="_blank">添加公众号失败怎么办？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/faq/152-cn.html" target="_blank">为什么设置好自定义菜单或自动回复却未能生效？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/faq/153-cn.html" target="_blank">为什么订阅用户点击自定义菜单回复很慢甚至没有回复？</a>
+		</dd>
+	</dl>
+	</div>
+	<div class="v52fmbx_dlbox">
+	<dl>
+		<dt></dt>
+		<dd>
+			<a href="http://www.metinfo.cn/course/faq/154-cn.html" target="_blank">网站内容推送效果中的默认图标如何更换？</a>
+		</dd>
+	</dl>
+	</div>
+</div>
+</div>
+</div>
+</form>
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->

@@ -1,0 +1,354 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+</head>
+$listjs
+<!--
+EOT;
+$title="微信营销 > 回复设置";
+require_once template('../../app/weixin/top');
+require_once template('metlangs');
+$title_h3="关键词自动回复：";
+echo <<<EOT
+-->
+<body>
+<style type="text/css">
+textarea.gens{width:70% !important;height:150px;}
+</style>
+<form method="POST" name="myform" action="replysave.php?anyid={$anyid}&lang={$lang}&cs={$cs}" target="_self">
+<input name="action" type="hidden" value="$action" />
+<input name="id" type="hidden" value="$id" />
+<input name="weixinid" type="hidden" value="$weixinid" />
+<div class="v52fmbx_tbmax">
+<div class="v52fmbx_tbbox">
+<div class="v52fmbx">
+<!--
+EOT;
+$motop[3]="now";
+require_once template('../../app/weixin/tmp/motop');
+if($reply[genre]==1)$title_h3='被添加自动回复';
+if($reply[genre]==2)$title_h3='消息自动回复';
+echo <<<EOT
+-->
+	<h3 class="v52fmbx_hr metsliding" sliding="1">{$title_h3}</h3>
+	<div class="metsliding_box metsliding_box_1">
+<!--
+EOT;
+if(!$reply[genre]||$reply[genre]==3){
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>规则名称{$lang_marks}</dt>
+			<dd>
+				<input type="text" class="text nonull" name="wenxin_reply_name" value="$reply[name]"/>
+				<span class="tips">用于区别于其它规则</span>
+			</dd>
+		</dl>
+		</div>
+		<h3 class="v52fmbx_hr metsliding">
+		已全匹配关键词：用户发送的信息中必须与关键词完全一致才触发回复。如设置123为关键词，用户必须输入123才触发，输入1234不触发。<br/>
+		未全匹配关键词：只要用户发送的信息中包含关键词则触发回复。
+		</h3>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>已全匹配关键词{$lang_marks}</dt>
+			<dd>
+				<textarea name="wenxin_reply_keywords_all" class="textarea gens">$keywords_all</textarea><br/>
+				<span class="tips">每个关键词最多30个字符，不同关键词用竖线 | 隔开。</span>
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>未全匹配关键词{$lang_marks}</dt>
+			<dd>
+				<textarea name="wenxin_reply_keywords_contain" class="textarea gens">$keywords_contain</textarea><br/>
+				<span class="tips">每个关键词最多30个字符，不同关键词用竖线 | 隔开。</span>
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>类型{$lang_marks}</dt>
+			<dd>
+				<select id='reply_type' name='wenxin_reply_type' onchange='return changetype()' $disable_wenxin_reply_type>
+					<option value="3" $wenxin_reply_type1[3]>文字回复</option>
+					<option value="4" $wenxin_reply_type1[4]>图文回复</option>
+					<option value="5" $wenxin_reply_type1[5]>网站内容推送</option>
+				</select>
+			</dd>
+		</dl>
+		</div>
+		<div name="text" class="v52fmbx_dlbox" $displaytext>
+		<dl>
+			<dt>回复内容{$lang_marks}</dt>
+			<dd>
+				<textarea name="met_weixin_text" class="textarea gens nonull">$reply[text]</textarea>
+				<br/><span class="tips">微信能够识别电话号码，支持点击电话号码直接拨打</span>
+			</dd>
+		</dl>
+		</div>
+		<div name="contents" class="v52fmbx_dlbox" $displaycontents>
+			<dl>
+				<dd>
+				<span class="color390">网站内容推送是指：以图文回复一样的效果将网站已经添加好的内容回复给订阅用户。
+				<br/>随着网站内容的变动，推送的内容也会变动。<br/>当自定义了手机版显示内容时候，推送内容将和手机版一致。</span>
+			</dd>
+		</dl>
+		</div>
+		<div name="contents" class="v52fmbx_dlbox" $displaycontents>
+		<dl>
+			<dt>选择栏目{$lang_marks}</dt>
+			<dd>
+		<select name="mod" id="modselect" class="noselect" onChange="changemod()">
+			<option value="2" $selected_mod[2]>新闻模块</option>
+			<option value="3" $selected_mod[3]>产品模块</option>
+			<option value="4" $selected_mod[4]>下载模块</option>
+			<option value="5" $selected_mod[5]>图片模块</option>
+		</select>
+		<input type="hidden" name="weixinlang" id="langselect" value='$lang'/>
+		<select name="class1" id="class1select" onChange="changelocation1(document.myform.class1.options[document.myform.class1.selectedIndex].value,1)">		
+		<option value="0">所有一级栏目</option>
+<!--
+EOT;
+foreach($clist1now as $key=>$val1){
+$k=$val1['id'];
+echo <<<EOT
+-->			
+<option  value="$val1[id]" $selected_class1[$k]>$val1[name]</option>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		</select>
+		<select name="class2" id="class2select" onChange="changelocation1(document.myform.class2.options[document.myform.class2.selectedIndex].value,2)"> 
+		<option value="0">所有二级栏目</option>
+<!--
+EOT;
+foreach($clist2now as $key=>$val1){
+$k=$val1['id'];
+echo <<<EOT
+-->			
+<option  value="$val1[id]" $selected_class2[$k]>$val1[name]</option>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		</select>
+		<select name="class3" id="class3select" onChange=""> 
+		<option value="0">所有三级栏目</option>
+<!--
+EOT;
+foreach($clist3now as $key=>$val1){
+$k=$val1['id'];
+echo <<<EOT
+-->			
+<option  value="$val1[id]" $selected_class3[$k]>$val1[name]</option>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		</select>
+		&nbsp;&nbsp;<span class="tips">选择获取指定栏目内容</span>
+			</dd>
+		</dl>
+		</div>
+		<div name="contents" class="v52fmbx_dlbox" $displaycontents>
+			<dl>
+				<dt>推送类型：</dt>
+				<dd>
+				<label><input name="recommend" type="radio" class="radio" value="1" $recommend1[1]>推荐信息</label>
+				<label><input name="recommend" type="radio" class="radio" value="0" $recommend1[0]>全部信息</label>
+				<span class="tips">推荐信息是指设置为推荐的信息，比如文章管理中可以将指定文章设置为推荐文章</span>
+			</dd>
+		</dl>
+		</div>
+		<div name="contents" class="v52fmbx_dlbox" $displaycontents>
+		<dl>
+			<dt>推送条数{$lang_marks}</dt>
+			<dd>
+				<input name='num' type='text' class='text nonull mid' value='$reply[num]' />
+				<span class="tips">最多显示10条</span>
+			</dd>
+		</dl>
+		</div>
+		<div name="imgtext" class="v52fmbx_dlbox newlist" $dispalyimgtext>
+			<h3 class="v52fmbx_hr metsliding" sliding="1">图文内容[1]</h3>
+			<dl>
+				<dt>图片{$lang_marks}</dt>
+				<dd style='position:relative;'>
+					<input name='displayimg1' type='text' class='text' value='{$imgtext_lists[0][img]}' />
+					<input name='met_upsql1' type='file' id='displayimg_upload1' />
+					<script type='text/javascript'>
+						metuploadify('#displayimg_upload1','upimage','displayimg1','','3');
+					</script>
+				</dd>
+			</dl>
+			<dl>
+				<dt>标题{$lang_marks}</dt>
+				<dd style='position:relative;'>
+					<input name='displayname1' type='text' class='text nonull' value='{$imgtext_lists[0][name]}' />
+				</dd>
+			</dl>
+			<dl>
+				<dt>链接{$lang_marks}</dt>
+				<dd style='position:relative;'>
+				<input name='displayurl1' type='text' class='text nonull' value='{$imgtext_lists[0][url]}' />
+				<span class="tips">一般用于链接到手机网站指定页面</span>
+				</dd>
+			</dl>
+			<dl>
+				<dt>描述{$lang_marks}</dt>
+				<dd style='position:relative;'>
+					<textarea name="wenxin_reply_description" class="textarea gen">$reply[description]</textarea>
+					<br/><span class='tips'>多图文内容展示时候，将不会显示描述内容</span>
+				</dd>
+			</dl>
+		</div>
+		<div id="list-top"><input name="imgnum" type="hidden" value="{$imgnum}" /></div>
+<!--
+EOT;
+unset($imgtext_lists[0]);
+foreach($imgtext_lists as $key=>$val){
+$num=$key+1;
+echo <<<EOT
+-->
+		<div name="imgtext" class="v52fmbx_dlbox newlist" $dispalyimgtext>
+		<h3 class="v52fmbx_hr metsliding" sliding="1">图文内容{$num}</h3>
+		<dl>
+			<dt>标题{$lang_marks}</dt>
+			<dd style='position:relative;'>
+				<input name='displayname{$num}' type='text' class='text nonull' value='{$val[name]}' />
+				<a href='javascript:;' onclick='imgnumfu();deletdisplayimg($(this));' class='displayimg_del'>{$lang_delete}</a>
+			</dd>
+		</dl>
+		<dl>
+			<dt>链接{$lang_marks}</dt>
+			<dd style='position:relative;'>
+				<input name='displayurl{$num}' type='text' class='text nonull' value='{$val[url]}' />
+				<span class="tips">一般用于链接到手机网站指定页面</span>
+			</dd>
+		</dl>
+		<dl>
+			<dt>图片{$lang_marks}</dt>
+			<dd style='position:relative;'>
+				<input name='displayimg{$num}' type='text' class='text' value='{$val[img]}' />
+				<input name='met_upsql{$num}' type='file' id='displayimg_upload{$num}' />
+				<script type='text/javascript'>
+					metuploadify('#displayimg_upload{$num}','upimage','displayimg{$num}','','3');
+				</script>
+				
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		<div name="imgtext" class="v52fmbx_dlbox" $dispalyimgtext>
+			<dl>
+				<dt>
+				</dt>
+				<dd>
+				<a href="indexeditor.php?lang=$lang&action=imgadd" onclick="return weixin_adddisplayimg($(this));">添加图文内容</a>
+				<span id="loadtxt"></span>
+				<span class='tips'>最多添加10个图文内容</span>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<div class="v52fmbx_submit"><input type="submit" name="Submit" value="{$lang_Submit}" class="submit" onclick="return Smit($(this),'myform')" /></div>
+</div>
+</div>
+</div>
+</form>
+<script type="text/javascript">
+function weixin_adddisplayimg(my){
+	var i=0;
+	$("input[name*='displayimg']").each(function(){
+		i++;
+	});
+	if(i>9){
+		alert('最多添加10个图文内容');
+		return false;
+	}
+	return adddisplayimg(my);
+}
+
+function changetype(){
+	var type=$('#reply_type').val();
+	switch(type){
+		case '1':
+			$("[name='text']").hide();
+			$("[name='imgtext']").hide();
+			$("[name='url']").hide();
+			$("[name='contents']").hide();
+		break;
+		case '2':
+			$("[name='text']").hide();
+			$("[name='imgtext']").hide();
+			$("[name='url']").show();
+			$("[name='contents']").hide();
+		break;
+		case '3':
+			$("[name='text']").show();
+			$("[name='imgtext']").hide();
+			$("[name='url']").hide();
+			$("[name='contents']").hide();
+		break;
+		case '4':
+			$("[name='text']").hide();
+			$("[name='imgtext']").show();
+			$("[name='url']").hide();
+			$("[name='contents']").hide();
+		break;
+		case '5':
+			$("[name='text']").hide();
+			$("[name='imgtext']").hide();
+			$("[name='url']").hide();
+			$("[name='contents']").show();
+		break;
+	}
+	ifreme_methei();
+}
+function changemod(){
+	var mod=$('#modselect').val();
+	var string ='<option value="0">所有一级栏目</option>';
+	var lang=$('#langselect').val();
+	for(var i=0;i<onecount;i++){
+		if(lev[i][4]==mod&&lev[i][1]==0){
+			if(lang==0){
+				string =string+'<option value="'+lev[i][2]+'">'+lev[i][0]+'</option>';
+			}else{
+				if(lev[i][5]==lang){
+				string =string+'<option value="'+lev[i][2]+'">'+lev[i][0]+'</option>';
+				}
+			}
+		}
+	}
+	$('#class1select').html(string);
+	$('#class2select').html('<option value="0">所有二级栏目</option>');
+	$('#class3select').html('<option value="0">所有三级栏目</option>');
+}
+</script>
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->

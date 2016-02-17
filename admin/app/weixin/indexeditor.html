@@ -1,0 +1,403 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+</head>
+$listjs
+<!--
+EOT;
+$title="微信营销 > 自定义菜单 > 编辑";
+if($action=='add')$title="微信 > 自定义菜单 > 添加菜单";
+$listclass[5]="class='now'";
+require_once template('../../app/weixin/top');
+require_once template('metlangs');
+echo <<<EOT
+-->
+<body>
+<style type="text/css">
+textarea.gens{width:70% !important;height:150px;}
+</style>
+<form method="POST" name="myform" action="indexsave.php?anyid={$anyid}&lang={$lang}&cs={$cs}" target="_self">
+<input name="action" type="hidden" value="$action" />
+<input name="weixin_menu_local_level" type="hidden" class="text" value="$level" />
+<input name="weixin_menu_local_pre" type="hidden" class="text" value="$preclass" />
+<input name="id" type="hidden" value="$id" />
+<input name="weixinid" type="hidden" value="$weixinid" />
+<div class="v52fmbx_tbmax">
+<div class="v52fmbx_tbbox">
+<div class="v52fmbx">
+<!--
+EOT;
+$motop[2]="now";
+$id=$weixinid;
+require_once template('../../app/weixin/tmp/motop');
+echo <<<EOT
+-->
+	<h3 class="v52fmbx_hr metsliding" sliding="1">菜单信息</h3>
+	<div class="metsliding_box metsliding_box_1">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>名称{$lang_marks}</dt>
+			<dd>
+				<input name="weixin_menu_name" type="text" class="text nonull" value="$menu[name]" />
+<!--
+EOT;
+if($level==1){
+echo <<<EOT
+-->
+				<span class="tips">一级菜单最多支持5个汉字字符（英文字符算半个汉字字符）</span>
+<!--
+EOT;
+}else{
+echo <<<EOT
+-->
+				<span class="tips">二级菜单最多支持10个汉字字符（英文字符算半个汉字字符）</span>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>排序{$lang_marks}</dt>
+			<dd>
+				<input name="weixin_menu_list_order" type="text" class="text nonull mid" value="$menu[list_order]" />
+				<span class='tips'>排序数值越小越靠前</span>
+			</dd>
+		</dl>
+		</div>
+		<h3 class="v52fmbx_hr metsliding" sliding="1">菜单点击效果</h3>
+		<div class="metsliding_box metsliding_box_1">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>类型{$lang_marks}</dt>
+			<dd>
+				<select id='menu_type' name='weixin_menu_type' onchange='return changetype()' $disable_weixin_menu_type>
+<!--
+EOT;
+if($level==1){
+echo <<<EOT
+-->
+					<option value="1" $weixin_menu_type1[1]>菜单</option>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+					<option value="2" $weixin_menu_type1[2]>打开网址</option>
+					<option value="3" $weixin_menu_type1[3]>文字回复</option>
+					<option value="4" $weixin_menu_type1[4]>图文回复</option>
+					<option value="5" $weixin_menu_type1[5]>网站内容推送</option>
+				</select>
+<!--
+EOT;
+if($disable_weixin_menu_type){
+echo <<<EOT
+-->
+	<span class='tips'>此一级菜单下添加了二级菜单，因此无法再更换菜单点击效果</span>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+if($level==1){
+$lnone = $weixin_menu_type1[1]?'':'none';
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox caidantype_1 $lnone">
+		<dl>
+			<dt></dt>
+			<dd>
+				<span class="tips">设置为菜单则可以用于添加二级菜单，点击此菜单将会展开二级菜单</span>
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox caidantype_3" $displaytext>
+		<dl>
+			<dt>回复内容{$lang_marks}</dt>
+			<dd>
+				<textarea name="met_weixin_text" class="textarea gens nonull">$menu[text]</textarea>
+				<br/><span class="tips">微信能够识别电话号码，支持点击电话号码直接拨打</span>
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox caidantype_5" $displaycontents>
+			<dl>
+				<dd>
+				<span class="color390">网站内容推送是指：以图文回复一样的效果将网站已经添加好的内容回复给订阅用户。
+				<br/>随着网站内容的变动，推送的内容也会变动。<br/>当自定义了手机版显示内容时候，推送内容将和手机版一致。</span>
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox caidantype_5" $displaycontents>
+		<dl>
+			<dt>选择栏目{$lang_marks}</dt>
+			<dd>
+		<select name="mod" id="modselect" class="noselect" onChange="changemod()">
+			<option value="2" $selected_mod[2]>新闻模块</option>
+			<option value="3" $selected_mod[3]>产品模块</option>
+			<option value="4" $selected_mod[4]>下载模块</option>
+			<option value="5" $selected_mod[5]>图片模块</option>
+		</select>
+		<input type="hidden" name="weixinlang" id="langselect" value='$lang'/>
+		<select name="class1" id="class1select" onChange="changelocation1(document.myform.class1.options[document.myform.class1.selectedIndex].value,1)">		
+		<option value="0">所有一级栏目</option>
+<!--
+EOT;
+foreach($clist1now as $key=>$val1){
+$k=$val1['id'];
+echo <<<EOT
+-->			
+<option  value="$val1[id]" $selected_class1[$k]>$val1[name]</option>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		</select>
+		<select name="class2" id="class2select" onChange="changelocation1(document.myform.class2.options[document.myform.class2.selectedIndex].value,2)"> 
+		<option value="0">所有二级栏目</option>
+<!--
+EOT;
+foreach($clist2now as $key=>$val1){
+$k=$val1['id'];
+echo <<<EOT
+-->			
+<option  value="$val1[id]" $selected_class2[$k]>$val1[name]</option>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		</select>
+		<select name="class3" id="class3select" onChange=""> 
+		<option value="0">所有三级栏目</option>
+<!--
+EOT;
+foreach($clist3now as $key=>$val1){
+$k=$val1['id'];
+echo <<<EOT
+-->			
+<option  value="$val1[id]" $selected_class3[$k]>$val1[name]</option>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		</select>
+		&nbsp;&nbsp;<span class="tips">选择获取指定栏目内容</span>
+			</dd>
+		</dl>
+		<dl>
+				<dt>推送类型：</dt>
+				<dd>
+				<label><input name="recommend" type="radio" class="radio" value="1" $recommend1[1]>推荐信息</label>
+				<label><input name="recommend" type="radio" class="radio" value="0" $recommend1[0]>全部信息</label>
+				<span class="tips">推荐信息是指设置为推荐的信息，比如文章管理中可以将指定文章设置为推荐文章</span>
+			</dd>
+		</dl>
+		<dl>
+			<dt>推送条数{$lang_marks}</dt>
+			<dd>
+				<input name='num' type='text' class='text nonull mid' value='$menu[num]' />
+				<span class="tips">最多显示10条</span>
+			</dd>
+		</dl>
+		</div>
+		<div name="imgtext" class="v52fmbx_dlbox newlist caidantype_4" $dispalyimgtext>
+			<h3 class="v52fmbx_hr metsliding" sliding="1">图文内容[1]</h3>
+			<dl>
+				<dt>图片{$lang_marks}</dt>
+				<dd style='position:relative;'>
+					<input name='displayimg1' type='text' class='text' value='{$imgtext_lists[0][img]}' />
+					<input name='met_upsql1' type='file' id='displayimg_upload1' />
+					<script type='text/javascript'>
+						metuploadify('#displayimg_upload1','upimage','displayimg1','','3');
+					</script>
+				</dd>
+			</dl>
+			<dl>
+				<dt>标题{$lang_marks}</dt>
+				<dd style='position:relative;'>
+					<input name='displayname1' type='text' class='text nonull' value='{$imgtext_lists[0][name]}' />
+				</dd>
+			</dl>
+			<dl>
+				<dt>链接{$lang_marks}</dt>
+				<dd style='position:relative;'>
+				<input name='displayurl1' type='text' class='text nonull' value='{$imgtext_lists[0][url]}' />
+				</dd>
+			</dl>
+			<dl>
+				<dt>描述{$lang_marks}</dt>
+				<dd style='position:relative;'>
+					<textarea name="weixin_menu_description" class="textarea gen">$menu[description]</textarea>
+					<span class='tips'>多图文内容展示时候，将不会显示描述内容</span>
+				</dd>
+			</dl>
+		</div>
+		<div id="list-top"><input name="imgnum" type="hidden" value="{$imgnum}" /></div>
+<!--
+EOT;
+unset($imgtext_lists[0]);
+foreach($imgtext_lists as $key=>$val){
+$num=$key+1;
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox newlist caidantype_4" $dispalyimgtext>
+		<h3 class="v52fmbx_hr metsliding" sliding="1">图文内容[{$num}]</h3>
+		<dl>
+			<dt>图片{$lang_marks}</dt>
+			<dd style='position:relative;'>
+				<input name='displayimg{$num}' type='text' class='text' value='{$val[img]}' />
+				<input name='met_upsql{$num}' type='file' id='displayimg_upload{$num}' />
+				<script type='text/javascript'>
+					metuploadify('#displayimg_upload{$num}','upimage','displayimg{$num}','','3');
+				</script>
+			</dd>
+		</dl>
+		<dl>
+			<dt>标题{$lang_marks}</dt>
+			<dd style='position:relative;'>
+				<input name='displayname{$num}' type='text' class='text nonull' value='{$val[name]}' />
+				<a href='javascript:;' onclick='imgnumfu();deletdisplayimg($(this));' class='displayimg_del'>{$lang_delete}</a>
+			</dd>
+		</dl>
+		<dl>
+			<dt>链接{$lang_marks}</dt>
+			<dd style='position:relative;'>
+				<input name='displayurl{$num}' type='text' class='text nonull' value='{$val[url]}' />
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox caidantype_4" $dispalyimgtext>
+			<dl>
+				<dt>
+				</dt>
+				<dd>
+				<a href="indexeditor.php?lang=$lang&action=imgadd" onclick="return weixin_adddisplayimg($(this));">添加图文内容</a>
+				<span id="loadtxt"></span>
+				<span class='tips'>最多添加10个图文内容</span>
+				</dd>
+			</dl>
+		</div>
+		<div class="v52fmbx_dlbox caidantype_2" $dispalyurl>
+		<dl>
+			<dt>链接地址{$lang_marks}</dt>
+			<dd>
+				<input class="text nonull" name="met_weixin_url" value="$menu[url]"/>
+			</dd>
+		</dl>
+		</div>
+	</div>
+	</div>
+	<div class="v52fmbx_submit"><input type="submit" name="Submit" value="{$lang_Submit}" class="submit" onclick="return check($(this),'myform')" /></div>
+</div>
+</div>
+</div>
+</form>
+<script type="text/javascript">
+function weixin_adddisplayimg(my){
+	var i=0;
+	$("input[name*='displayimg']").each(function(){
+		i++;
+	});
+	if(i>9){
+		alert('最多添加10个图文内容');
+		return false;
+	}
+	return adddisplayimg(my);
+}
+function level(){
+	var l=$('#local_pre').val();
+	var type=$('#menu_type').val();
+	if(l==1){
+		$('#localpre').hide();
+		$('#menu_type').html('<option value="1">菜单</option><option value="2">网址</option><option value="3">文字回复</option><option value="4">图文回复</option>');
+		$("#menu_type").attr("value",type);
+	}else{
+		$('#localpre').show();
+		$('#menu_type').html('<option value="2">网址</option><option value="3">文字回复</option><option value="4">图文回复</option>');
+		$("#menu_type").attr("value",type);
+	}
+	ifreme_methei();
+}
+function changetype(){
+	var type=$('#menu_type').val();
+	$("[class*=caidantype_]").hide();
+	$(".caidantype_"+type).show();
+	ifreme_methei();
+}
+function get_length(s){
+	var char_length = 0;
+	for (var i = 0; i < s.length; i++){
+		var son_char = s.charAt(i);
+		encodeURI(son_char).length > 2 ? char_length += 2 : char_length += 1;
+	}
+	return char_length;
+}
+function check(my,from){
+	var len=get_length($("[name='weixin_menu_name']").val());
+	var l=$("[name='weixin_menu_local_level']").val();
+	if(l==1){
+		if(len>10){
+			alert('字符数过多！');
+			return false;
+		}
+	}else{
+		if(len>20){
+			alert('字符数过多！');
+			return false;
+		}
+	}
+	return Smit(my,from);
+}
+function changemod(){
+	var mod=$('#modselect').val();
+	var string ='<option value="0">所有一级栏目</option>';
+	var lang=$('#langselect').val();
+	for(var i=0;i<onecount;i++){
+		if(lev[i][4]==mod&&lev[i][1]==0){
+			if(lang==0){
+				string =string+'<option value="'+lev[i][2]+'">'+lev[i][0]+'</option>';
+			}else{
+				if(lev[i][5]==lang){
+				string =string+'<option value="'+lev[i][2]+'">'+lev[i][0]+'</option>';
+				}
+			}
+		}
+	}
+	$('#class1select').html(string);
+	$('#class2select').html('<option value="0">所有二级栏目</option>');
+	$('#class3select').html('<option value="0">所有三级栏目</option>');
+}
+</script>
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->

@@ -1,0 +1,165 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+<title>菜单管理</title>
+</head>
+<body>
+<!--
+EOT;
+$title="微信营销 > 自定义菜单";
+$rurl="../dlapp/index.php?anyid={$anyid}&lang={$lang}";
+require_once template('metlangs');
+if($status==1){
+   $style1="style='color:#FF0000' selected='selected'";
+ }elseif($status==2){
+   $style2="style='color:#FF0000' selected='selected'";
+ }elseif($status==3){
+   $style3="style='color:#FF0000' selected='selected'";
+  }elseif($status==''){
+   $style0="style='color:#FF0000' selected='selected'";
+ }
+$listclass[5]="class='now'";
+require_once template('../../app/weixin/top');
+echo <<<EOT
+-->
+<div class="v52fmbx_tbmax v52fmbx_tbmaxmt">
+<div class="v52fmbx_tbbox">
+<!--
+EOT;
+$motop[2]="now";
+require_once template('../../app/weixin/tmp/motop');
+echo <<<EOT
+-->
+<h3 class="v52fmbx_hr">
+	<a href="../weixin/indexeditor.php?lang=$lang&anyid={$anyid}&cs={$cs}&action=add&level=1&weixinid={$id}">+一级菜单</a>
+	<span style="font-weight:normal; color:#999; padding-left:10px;">排序数值越小越靠前</span>
+</h3>
+<table cellpadding="2" cellspacing="1" class="table">
+              <tr>
+                <td width="30" class="list">{$lang_selected}</td>
+                <td width="30" class="list">排序</td>
+                <td width="200" class="list">名称</td>
+                <td width="60" class="list">菜单效果</td>
+				<td class="list list_left">{$lang_operate}</td>
+              </tr>
+			  <form name="del" method="post" action="index.php?lang=$lang&anyid=$anyid&cs=1&weixinid={$id}">
+<!--
+EOT;
+foreach ($list_array1 as $key=>$val){
+$next=0;
+if($val[type]!='菜单'&&$val['class']==1)$next=1;
+echo <<<EOT
+-->          
+              <tr class="mouse click">
+              <td class="list-text"><input name='id' type='checkbox' onClick="unselectall()" id="id" value='{$val[id]}' /><input type='hidden' id="level_{$val[id]}" value='1' /></td>
+                <td class="list-text alignleft" width="30"><input type="text" name="list_order_{$val[id]}" class="text no_order nonull" value="$val[list_order]" /></td>
+                <td class="list-text alignleft"><input type="text" class="text nonull" value="{$val[name]}" name="name_{$val[id]}" style="font-weight:bold; width:120px;" /></td>
+                <td class="list-text">$val[type]</td>
+				<td class="list-text list_left" style="color:#999;"><a href="../weixin/indexeditor.php?lang=$lang&anyid={$anyid}&cs={$cs}&action=add&level=2&preclass=$val[id]&weixinid={$id}" onclick="return menu('{$next}')">+二级菜单</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="indexeditor.php?id=$val[id]&lang=$lang&anyid={$anyid}&cs={$cs}&action=editor&level=1&weixinid={$id}" >设置</a></td>
+              </tr>
+<!--
+EOT;
+	if($list_array2[$val[id]]){
+		foreach ($list_array2[$val[id]] as $key1=>$val1){
+echo <<<EOT
+-->  		
+			 <tr class="mouse click">
+              <td class="list-text"><input name='id' type='checkbox' onClick="unselectall()" id="id" value='$val1[id]' /><input type='hidden' id="level_{$val[id]}" value='2' /></td>
+                <td class="list-text alignleft"><input type="text" name="list_order_{$val1[id]}" class="text no_order nonull" value="$val1[list_order]"></td>
+                <td class="list-text alignleft"><img src="../../templates/met/images/bg_column.gif" style="position:relative; top:6px;">&nbsp;<input type="text" style="width:120px;" class="text nonull" value="{$val1[name]}" name="name_{$val1[id]}"></td>
+                <td class="list-text ">$val1[type]</td>
+				<td class="list-text list_left" style="color:#999;"><a href="indexeditor.php?id=$val1[id]&lang=$lang&anyid={$anyid}&cs={$cs}&action=editor&level=2&preclass=$val[id]&weixinid={$id}" >设置</a></td>
+              </tr>	
+<!--
+EOT;
+		}
+	}
+}
+echo <<<EOT
+-->
+<!--
+EOT;
+if(!count($list_array1)){
+echo <<<EOT
+--> 
+   	    <tr> 
+            <td width="40" class="list-text list_left" colspan="5">尚未添加自定义菜单</td>
+        </tr>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+<input name="action" type="hidden" id="action" value="del">
+<input name="allid" type="hidden" id="allid" value=""></form>
+   	   <tr> 
+            <td width="40" class="all"><input name="chkAll" type="checkbox" id="chkAll" onclick="CheckAllx($(this),'del')" value="checkbox" /></td>
+			  <td class="all-submit" colspan="4" style="padding:5px 10px;">
+			  <input name="submit" type="submit" value="保存" class="submit li-submit" onclick="return met_modify($(this),'del','editor');">
+			  <input name="submit" type='submit' value='删除' class="submit li-submit" onclick="return met_modify($(this),'del','del');" /> 
+			  <span style="font-weight:normal; color:#999;"></span>
+              </td>
+          </tr>
+		 <tr>
+		  <td class="list-text list_left" colspan="5" style="color:#08c;white-space:normal">
+		  1、可创建最多 3 个一级菜单，每个一级菜单下可创建最多 5 个二级菜单。编辑中的菜单不会马上被用户看到，请放心调试。<br/>
+		  2、微信客户端24小时后才会更新菜单内容，测试请取消关注公众号，再重新添加关注公众号便可以更新菜单。
+		  </td>
+	  </tr>
+</table>
+</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	seachinput($('#searchtext'),'查询信息');
+});
+function get_length(s){
+	var char_length = 0;
+	for (var i = 0; i < s.length; i++){
+		var son_char = s.charAt(i);
+		encodeURI(son_char).length > 2 ? char_length += 2 : char_length += 1;
+	}
+	return char_length;
+}
+function check(my,myfrom,action){
+	$("input[name='id']").each(function() {
+		if ($(this).attr("checked")){
+			var len=get_length($("[name='name_"+$(this).val()+"']").val());
+			var str=$("[name='name_"+$(this).val()+"']").val();
+			var l=$('#level_'+$(this).val()).val();
+			if(l==1){
+				if(len>10){
+					alert(str+' 字符数过多，最多输入5个字符');
+					$("[name='name_"+$(this).val()+"']").focus();
+					return false;
+				}
+			}else{
+				if(len>20){
+					alert(str+' 字符数过多，最多输入10个字符');
+					$("[name='name_"+$(this).val()+"']").focus();
+					return false;
+				}
+			}
+		}
+	});
+	return met_modify(my,myfrom,action);
+}
+function menu(i){
+	if(i==1){
+		var tn = confirm('如果添加二级菜单，该一级菜单效果会强制变为菜单并且已经设置好的菜单效果将会失效。你确定要这样做吗？');
+		return tn;
+	}else{
+		return true;
+	}
+}
+</script>
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->

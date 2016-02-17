@@ -1,0 +1,377 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+</head>
+$listjs
+<!--
+EOT;
+$title="微信营销 > 账号设置";
+if($action=='add')$title="微信营销 > 添加公众号";
+require_once template('../../app/weixin/top');
+require_once template('metlangs');
+echo <<<EOT
+-->
+<body>
+<style type="text/css">
+textarea.gens{width:70% !important;height:150px;}
+</style>
+<form method="POST" name="myform" action="accountseditorsave.php?anyid={$anyid}&lang={$lang}&cs={$cs}" target="_self">
+<input name="weixinid" type="hidden" value="$id" />
+<input name="action" type="hidden" value="$action" />
+<input name="wenxin_accounts_check" type="hidden" value="$accounts[checksuc]" />
+<input name="id" type="hidden" value="$id" />
+<div class="v52fmbx_tbmax">
+<div class="v52fmbx_tbbox">
+<div class="v52fmbx">
+<!--
+EOT;
+if($action=='check'||$accounts[checksuc]==1){
+echo <<<EOT
+-->
+	<h3 class="v52fmbx_hr metsliding" sliding="3">请登录微信公众平台配置接口信息，配置成功后会自动跳转。</h3>
+	<div class="metsliding_box metsliding_box_3">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>URL{$lang_marks}</dt>
+			<dd>
+				<span id="URL">{$met_weburl}include/interface/weixin.php?wid=$accounts[originalid]</span>&nbsp;&nbsp;<a href="javascript:;" onclick="return copyToClipboard('{$met_weburl}include/interface/weixin.php?wid={$accounts[originalid]}')">复制</a>
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>Token{$lang_marks}</dt>
+			<dd>
+				<span id="token">$accounts[token]</span>&nbsp;&nbsp;<a href="javascript:;" onclick="return copyToClipboard('{$accounts[token]}')">复制</a>
+				<input name="wenxin_accounts_token" type="hidden" value="$accounts[token]" />
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+if($met_agents_type<3){
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt></dt>
+			<dd>
+				<a href="http://www.metinfo.cn/course/tutorial/148-cn.html" target="_blank">URL和Token该如何使用？</a>
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+	</div>
+<script type="text/javascript">
+$(document).ready(function () { 
+setInterval("startRequest()",1000); 
+}); 
+
+function startRequest() 
+{ 
+	$.ajax({
+		url: 'accountseditorsave.php?action=ping&id=$id',
+		type: 'GET',
+		cache: false,
+		success: function(data) {
+			if(data==2){
+				alert('验证成功');
+				location.href="accountseditorsave.php?lang={$lang}&anyid={$anyid}&cs={$cs}&action=check&id={$id}";
+			}
+		}
+	});
+} 
+
+</script>
+<!--
+EOT;
+}else if($action=='app'){
+echo <<<EOT
+-->
+	<h3 class="v52fmbx_hr metsliding" sliding="2">开发者凭据（填写后才能支持自定义菜单）&nbsp;&nbsp;
+<!--
+EOT;
+if($met_agents_type<3){
+echo <<<EOT
+-->
+	<a href="http://www.metinfo.cn/course/tutorial/147-cn.html" target="_blank">如何获取AppId和AppSecret？</a>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+	</h3>
+	<div class="metsliding_box metsliding_box_2">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>AppId{$lang_marks}</dt>
+			<dd>
+				<input name="wenxin_accounts_AppId" type="text" class="text" value="$accounts[AppId]" />
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox v52fmbx_mo">
+		<dl>
+			<dt>AppSecret{$lang_marks}</dt>
+			<dd>
+				<input name="wenxin_accounts_AppSecret" type="text" class="text" value="$accounts[AppSecret]" />
+			</dd>
+		</dl>
+		</div>
+	</div>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>二维码{$lang_marks}</dt>
+			<dd>
+				<span class="tips">填写正确的开发者凭据，并开通高级接口后生成。</span>&nbsp;&nbsp;
+<!--
+EOT;
+		if($met_agents_type<3){
+echo <<<EOT
+-->
+				<br><span><a href="http://www.metinfo.cn/course/tutorial/168-cn.html" target="_blank">如何开通高级接口?</a></span>
+<!--
+EOT;
+		}
+echo <<<EOT
+-->
+			</dd>
+		</dl>
+		</div>
+	<div class="v52fmbx_submit"><input type="submit" name="Submit" value="{$lang_Submit}" class="submit" onclick="return Smit($(this),'myform')" /></div>
+<!--
+EOT;
+}
+else{
+	if($action!='add'){
+	$motop[1]="now";
+	require_once template('../../app/weixin/tmp/motop');
+	}
+echo <<<EOT
+-->
+	<h3 class="v52fmbx_hr metsliding" sliding="1">帐号信息&nbsp;&nbsp;
+<!--
+EOT;
+if($met_agents_type<3){
+echo <<<EOT
+-->
+	<a href="http://www.metinfo.cn/course/tutorial/146-cn.html" target="_blank">如何创建微信公众号？</a>&nbsp;&nbsp;
+	<a href="http://www.metinfo.cn/course/tutorial/151-cn.html" target="_blank">如何获取微信公众号信息？</a>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+	</h3>
+	<div class="metsliding_box metsliding_box_2">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>名称{$lang_marks}</dt>
+			<dd>
+				<input name="wenxin_accounts_name" type="text" class="text nonull" value="$accounts[name]" />
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>原始ID{$lang_marks}</dt>
+			<dd>
+				<input name="wenxin_accounts_originalid" type="text" class="text nonull" value="$accounts[originalid]" />
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox v52fmbx_mo">
+		<dl>
+			<dt>微信号{$lang_marks}</dt>
+			<dd>
+				<input name="wenxin_accounts_weixinid" type="text" class="text nonull" value="$accounts[weixinid]" />
+			</dd>
+		</dl>
+		</div>
+	</div>
+<!--
+EOT;
+	if($accounts[checksuc]==2){
+echo <<<EOT
+-->
+	<h3 class="v52fmbx_hr metsliding" sliding="2">开发者凭据（填写后才能支持自定义菜单）&nbsp;&nbsp;
+<!--
+EOT;
+if($met_agents_type<3){
+echo <<<EOT
+-->
+	<a href="http://www.metinfo.cn/course/tutorial/147-cn.html" target="_blank">如何获取AppId和AppSecret？</a>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+	</h3>
+	<div class="metsliding_box metsliding_box_2">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>AppId{$lang_marks}</dt>
+			<dd>
+				<input name="wenxin_accounts_AppId" type="text" class="text" value="$accounts[AppId]" />
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox v52fmbx_mo">
+		<dl>
+			<dt>AppSecret{$lang_marks}</dt>
+			<dd>
+				<input name="wenxin_accounts_AppSecret" type="text" class="text" value="$accounts[AppSecret]" />
+			</dd>
+		</dl>
+		</div>
+	</div>
+
+<!--
+EOT;
+	}
+	if($accounts[checksuc]){
+echo <<<EOT
+-->	
+	<h3 class="v52fmbx_hr metsliding" sliding="3">接口配置信息（配置成功之后才能够成功与微信对接，实现各项功能）</h3>
+	<div class="metsliding_box metsliding_box_3">
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>URL{$lang_marks}</dt>
+			<dd>
+				<span id="URL">{$met_weburl}include/interface/weixin.php?wid=$accounts[originalid]</span>&nbsp;&nbsp;<a href="javascript:;" onclick="return copyToClipboard('{$met_weburl}include/interface/weixin.php?wid={$accounts[originalid]}')">复制</a>
+			</dd>
+		</dl>
+		</div>
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>Token{$lang_marks}</dt>
+			<dd>
+				<span id="token">$accounts[token]</span>&nbsp;&nbsp;<a href="javascript:;" onclick="return copyToClipboard('{$accounts[token]}')">复制</a>
+				<input name="wenxin_accounts_token" type="hidden" value="$accounts[token]" />
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+if($met_agents_type<3){
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt></dt>
+			<dd>
+				<a href="http://www.metinfo.cn/course/tutorial/148-cn.html" target="_blank">URL和Token该如何使用？</a>
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+	</div>
+<!--
+EOT;
+	}else{
+echo <<<EOT
+-->
+		<input name="wenxin_accounts_token" type="hidden" value="$accounts[token]" />
+<!--
+EOT;
+	}
+	if($accounts[checksuc]==2){
+echo <<<EOT
+-->	
+	<h3 class="v52fmbx_hr metsliding" sliding="3">二维码（扫一扫即可添加关注微信号）</h3>
+<!--
+EOT;
+	if($accounts[ticket]){
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>二维码{$lang_marks}</dt>
+			<dd>
+				<span><img src="http://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={$accounts[ticket]}" width="150" height="150" /></span>
+<!--
+EOT;
+		if($met_agents_type<3){
+echo <<<EOT
+-->
+				<br><span><a href="http://www.metinfo.cn/course/tutorial/149-cn.html" target="_blank">如何获取带LOGO的微信二维码?</a></span>
+<!--
+EOT;
+		}
+echo <<<EOT
+-->
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+	}else{
+echo <<<EOT
+-->
+		<div class="v52fmbx_dlbox">
+		<dl>
+			<dt>二维码{$lang_marks}</dt>
+			<dd>
+				<span class="tips">填写正确的开发者凭据，并开通高级接口后生成。</span>&nbsp;&nbsp;
+<!--
+EOT;
+		if($met_agents_type<3){
+echo <<<EOT
+-->
+				<br><span><a href="http://www.metinfo.cn/course/tutorial/168-cn.html" target="_blank">如何开通高级接口?</a></span>
+<!--
+EOT;
+		}
+echo <<<EOT
+-->
+			</dd>
+		</dl>
+		</div>
+<!--
+EOT;
+	}
+	}
+echo <<<EOT
+-->	
+	<div class="v52fmbx_submit"><input type="submit" name="Submit" value="{$lang_Submit}" class="submit" onclick="return Smit($(this),'myform')" /></div>
+<!--
+EOT;
+}
+echo <<<EOT
+-->	
+</div>
+</div>
+</div>
+</form>
+<script type="text/javascript">
+function copyToClipboard(txt) {
+    if (window.clipboardData) {
+        window.clipboardData.clearData();
+        window.clipboardData.setData("Text", txt);
+        alert("已经成功复制到剪帖板上！");
+    } else if (navigator.userAgent.indexOf("Opera") != -1) {
+        window.location = txt;
+    } else  {
+		alert("浏览器不支持复制，请手动复制！！");
+	}
+}
+</script>
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->

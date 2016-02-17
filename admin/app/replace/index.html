@@ -1,0 +1,164 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+</head>
+$listjs
+<!--
+EOT;
+$rurl="../dlapp/index.php?anyid={$anyid}&lang={$lang}";
+require_once template('metlangs');
+echo <<<EOT
+-->
+<body>
+<style type="text/css">
+textarea.gens{width:70% !important;height:150px;}
+</style>
+<script type="text/javascript">
+function replace_ajax(){
+	var class1=$('#class1select').val();
+	var class2=$('#class2select').val();
+	var class3=$('#class3select').val();
+	var type=$("input[name='typex']:checked").val();
+	var retexted=$('#retexted').val();
+	var retext=$('#retext').val();
+	if(class1==-1){
+		alert("请选择栏目");
+		$('#class1select').focus();
+		return false;
+	}
+	if(!retexted){
+		alert("被替换文字不能为空");
+		$('#retexted').focus();
+		return false;
+	}
+	if(!retext){
+		alert("替换成文字不能为空");
+		$('#retext').focus();
+		return false;
+	}
+	$('#submit').attr("disabled","true");
+	$.ajax({
+		url: '../replace/index.php?action=modify'+'&class1='+class1+'&class2='+class2+'&class3='+class3,
+		type: 'POST',
+		data: '',
+		success: function(result) {
+			$('#idlist').val(result);
+			replace_id(0,type,retexted,retext);
+		}
+	});
+return false;
+}
+function replace_id(num,type,retexted,retext){
+	var idlist=$('#idlist').val();
+	var ids=idlist.split("|");
+	var id=ids[num].split("-");
+	$.ajax({
+		url: '../replace/index.php?action=modifyid'+'&table='+id[1]+'&id='+id[0]+'&type='+type+'&retexted='+retexted+'&retext='+retext,
+		type: 'POST',
+		data: '',
+		success: function(result) {
+			num_next=num+1;
+			var len=ids.length-1;
+			$('#schedule').empty();
+			$('#schedule').append(num_next+'/'+len);
+			if(num==ids.length-1){
+				$('#schedule').empty();
+				$('#schedule').append('完成');
+				$('#submit').removeAttr("disabled");
+			}
+			else{
+				replace_id(num_next,type,retexted,retext);
+			}
+			
+		}
+	});
+return false;
+}
+</script>
+<form method="POST" name="myform" action="../replace/index.php?anyid={$anyid}&lang={$lang}&cs={$cs}" target="_self">
+<input name="action" type="hidden" value="modify" />
+<input id="idlist" type="hidden" value="" />
+<input id="table" type="hidden" value="" />
+<table cellpadding="2" cellspacing="1" class="table">
+	<tr> 
+		<td class="text red"></td>
+		<td class="input color390">一般网站搬家或换域名后图片还是原来的路径，导致图片无法显示，该功能可以很好的解决这一问题。</span>
+		</td>
+	</tr> 
+	<tr> 
+		<td class="text">我要替换：</td>
+		<td class="input">
+				<select name="class1" id="class1select" class="noselect" onChange="changelocation1(document.myform.class1.options[document.myform.class1.selectedIndex].value,1)">		
+		<option value="-1">{$lang_modClass1}</option>
+		<option value="-2">替换全部</option>
+<!--
+EOT;
+foreach($clist1now as $key=>$val1){
+$k=$val1['id'];
+echo <<<EOT
+-->			
+<option  value="$val1[id]" $class1[$k]>$val1[name]</option>
+<!--
+EOT;
+}
+echo <<<EOT
+-->
+		</select>
+		<select name="class2" id="class2select" onChange="changelocation1(document.myform.class2.options[document.myform.class2.selectedIndex].value,2)"> 
+		<option value=0>{$lang_modClass2}</option>
+		</select>
+		<select name="class3" id="class3select" onChange=""> 
+		<option value=0>{$lang_modClass3}</option>
+		</select>
+		&nbsp;&nbsp;<span class="tips">指定某个栏目替换或选择一键替换全部</span>
+		</td>
+	</tr>
+	<tr> 
+		<td class="text">替换类型：</td>
+		<td class="input">
+		<label><input name="typex" type="radio" value="1" checked /> 图片src路径</label>&nbsp;&nbsp;
+		<label><input name="typex" type="radio" value="3" /> 文本内容</label>&nbsp;&nbsp;
+		<label><input name="typex" type="radio" value="2" /> 超链接</label>
+		&nbsp;&nbsp;<span class="tips">只限于编辑器中相关内容的替换</span>
+		</td>
+	</tr>
+	<tr> 
+		<td class="text">被替换的文字：</td>
+		<td class="input"><input name="retexted" id="retexted" class="text" value=""/></td>
+	</tr>
+
+	<tr> 
+		<td class="text" id="">替换成：</td>
+		<td class="input"><input name="retext" id="retext" class="text" value=""/></td>
+	</tr>
+	<tr> 
+		<td class="text">进度：</td>
+		<td class="input color390"><span id='schedule'>未开始</span>
+		</td>
+	</tr> 
+	<tr> 
+		<td class="text red">注意：</td>
+		<td class="input red">替换过程不可逆，请做好备份，以防误操作造成丢失数据。</span>
+		</td>
+	</tr> 
+	<tr>
+		<td class="text"></td>
+		<td class="submit">
+			<input type="submit" name="submit" id="submit" value="替换" class="submit" onclick="return replace_ajax()" />
+		</td>
+    </tr>   
+	<tr>
+		  <td class="footer" colspan="9">$foot</td>
+	  </tr>
+</table>
+</form>
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->

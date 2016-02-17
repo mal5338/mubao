@@ -1,0 +1,155 @@
+<!--<?php
+# MetInfo Enterprise Content Management System 
+# Copyright (C) MetInfo Co.,Ltd (http://www.metinfo.cn). All rights reserved.
+require_once template('head');
+echo <<<EOT
+-->
+<title>菜单管理</title>
+</head>
+<body>
+<!--
+EOT;
+$title="微信营销 > 消息管理";
+$rurl="../dlapp/index.php?anyid={$anyid}&lang={$lang}";
+require_once template('metlangs');
+if($status==1){
+   $style1="style='color:#FF0000' selected='selected'";
+ }elseif($status==2){
+   $style2="style='color:#FF0000' selected='selected'";
+ }elseif($status==3){
+   $style3="style='color:#FF0000' selected='selected'";
+  }elseif($status==''){
+   $style0="style='color:#FF0000' selected='selected'";
+ }
+require_once template('../../app/weixin/top');
+echo <<<EOT
+-->
+<div class="v52fmbx_tbmax v52fmbx_tbmaxmt">
+<div class="v52fmbx_tbbox">
+<div class="v52fmbx">
+<!--
+EOT;
+$motop[3]="now";
+require_once template('../../app/weixin/tmp/motop');
+echo <<<EOT
+-->
+<h3 class="v52fmbx_hr metsliding" sliding="1">
+<span style="float:right">当订阅用户添加好微信公众号的时候</span>
+被添加自动回复
+</h3>
+<div class="v52fmbx_dlbox" style="margin-bottom:15px;">
+<dl>
+	<dt></dt>
+	<dd>
+<!--
+EOT;
+foreach ($replys as $key=>$val){
+if($val[genre]==1){
+echo <<<EOT
+-->
+<a href="replyeditor.php?id=$val[id]&lang=$lang&anyid={$anyid}&cs={$cs}&action=editor&level=1&weixinid={$id}">进入设置</a>
+<!--
+EOT;
+}}
+echo <<<EOT
+-->
+	</dd>
+</dl>
+</div>
+<h3 class="v52fmbx_hr metsliding" sliding="2">
+<span style="float:right">当订阅用户给微信公众号发送消息的时候</span>
+消息自动回复
+</h3>
+<div class="v52fmbx_dlbox" style="margin-bottom:15px;">
+<dl>
+	<dt></dt>
+	<dd>
+<!--
+EOT;
+foreach ($replys as $key=>$val){
+if($val[genre]==2){
+echo <<<EOT
+-->
+<a href="replyeditor.php?id=$val[id]&lang=$lang&anyid={$anyid}&cs={$cs}&action=editor&level=1&weixinid={$id}">进入设置</a>
+<!--
+EOT;
+}}
+echo <<<EOT
+-->
+	</dd>
+</dl>
+</div>
+<h3 class="v52fmbx_hr metsliding" sliding="3" style="border-bottom:0px;">
+<span style="float:right">优先级高于消息自动回复</span>
+关键词自动回复</h3>
+<table cellpadding="2" cellspacing="1" class="table">
+              <tr>
+                <td width="30" class="list">{$lang_selected}</td>
+                <td width="80" class="list" width="100">规则名称</td>
+				<td width="200" class="list">关键词</td>
+				<td class="list list_left">{$lang_operate}</td>
+              </tr>
+			  <form name="del" method="post" action="reply.php?lang=$lang&anyid=$anyid&cs=1&weixinid={$id}">
+<!--
+EOT;
+foreach ($replys as $key=>$val){
+if($val[genre]==3){
+$keywords_all='';
+$keywords_contain='';
+$query="select * from $met_weixin_keywords where replyid='$val[id]'";
+$keywords=$db->get_all($query);
+foreach($keywords as $key=>$val2){
+	if($val2[type]==1){
+		$keywords_all.=$val2[word].'|';
+	}else{
+		$keywords_contain.=$val2[word].'|';
+	}
+}
+$keywords_all=trim($keywords_all,'|');
+$keywords_contain=trim($keywords_contain,'|');
+echo <<<EOT
+-->          
+              <tr class="mouse click">
+              <td class="list-text"><input name='id' type='checkbox' onClick="unselectall()" id="id" value='{$val[id]}' /><input type='hidden' id="level_{$val[id]}" value='1' /></td>
+                <td class="list-text alignleft">{$val[name]}</td>
+				<td class="list-text">{$keywords_all}|{$keywords_contain}</td>
+				<td class="list-text list_left" style="color:#999;"><a href="replyeditor.php?id=$val[id]&lang=$lang&anyid={$anyid}&cs={$cs}&action=editor&level=1&weixinid={$id}">设置</a>&nbsp;&nbsp;|&nbsp;&nbsp;	
+				<a href="reply.php?id=$val[id]&lang=$lang&anyid={$anyid}&action=delete&cs={$cs}&weixinid={$id}" onClick="return linkSmit($(this),1);" >删除</a>
+				</td>
+              </tr>
+<!--
+EOT;
+}}
+echo <<<EOT
+-->
+   	   <tr> 
+            <td width="40" class="list-text"></td>
+			<td class="list-text list_left" colspan="3">
+				<a href="../weixin/replyeditor.php?lang=$lang&anyid={$anyid}&cs={$cs}&action=add&level=1&weixinid={$id}">+添加规则</a>
+			</td>
+          </tr>
+<input name="action" type="hidden" id="action" value="del">
+<input name="allid" type="hidden" id="allid" value=""></form>
+   	   <tr> 
+            <td width="40" class="all"><input name="chkAll" type="checkbox" id="chkAll" onclick="CheckAllx($(this),'del')" value="checkbox" /></td>
+			  <td class="all-submit" colspan="3" style="padding:5px 10px;">
+			  <input name="submit" type='submit' value='删除' class="submit li-submit" onclick="return met_modify($(this),'del','del');" /> 
+			  <span style="font-weight:normal; color:#999;"></span>
+              </td>
+          </tr>
+</table>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	seachinput($('#searchtext'),'查询信息');
+});
+</script>
+</body>
+</html>
+<!--
+EOT;
+# This program is an open source system, commercial use, please consciously to purchase commercial license.
+# Copyright (C) MetInfo Co., Ltd. (http://www.metinfo.cn). All rights reserved.
+?>-->
