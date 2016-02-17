@@ -14,4 +14,4 @@ Disallow: /job/templates/
 Disallow: /member/
 Disallow: /sitemap/templates/
 Disallow: /wap/templates/
-Sitemap: http://app.metinfo.cn/metv5/sitemap.xml
+Sitemap: http://localhost/mubao/sitemap.xml
